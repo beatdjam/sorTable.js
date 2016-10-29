@@ -1,0 +1,9 @@
+/* ƒe[ƒuƒ‹‚ÌŠî‘bCSS */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+th, td {
+    border: 1px solid #666;
+    width: 150px;
+}
