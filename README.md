@@ -6,6 +6,9 @@ Sort HTML table without jQuery
 
 `sorTable.js`は、HTMLテーブルのソートができます。
 
+## DEMO
+[デモページ](https://beatdjam.github.io/sorTable.js)
+
 ## 使い方
 
 1. sorTable.jsを読み込んでください  
