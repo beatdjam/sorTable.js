@@ -2,31 +2,32 @@
 
 Sort HTML table without jQuery
 
-## à–¾
+## èª¬æ˜Ž
 
-`sorTable.js`‚ÍAHTMLƒe[ƒuƒ‹‚Ìƒ\[ƒg‚ª‚Å‚«‚Ü‚·B
+`sorTable.js`ã¯ã€HTMLãƒ†ãƒ¼ãƒ–ãƒ«ã®ã‚½ãƒ¼ãƒˆãŒã§ãã¾ã™ã€‚
 
 ## DEMO
-[ƒfƒ‚ƒy[ƒW](https://beatdjam.github.io/sorTable.js)
+[ãƒ‡ãƒ¢ãƒšãƒ¼ã‚¸](https://beatdjam.github.io/sorTable.js)
 
-## Žg‚¢•û
+## ä½¿ã„æ–¹
 
-1. sorTable.js‚ð“Ç‚Ýž‚ñ‚Å‚­‚¾‚³‚¢  
+1. sorTable.jsã‚’èª­ã¿è¾¼ã‚“ã§ãã ã•ã„  
 	```html
 	<script src="sortTable.js"></script>
-	```
+	```	
 	```html
 	<script src="sortTable.min.js"></script>
 	```
-1. ƒ\[ƒg‘ÎÛ‚Ìƒe[ƒuƒ‹‚É`sortable`ƒNƒ‰ƒX‚ð‚Â‚¯‚Ä‚­‚¾‚³‚¢  
+	
+2. ã‚½ãƒ¼ãƒˆå¯¾è±¡ã®ãƒ†ãƒ¼ãƒ–ãƒ«ã«`sortable`ã‚¯ãƒ©ã‚¹ã‚’ã¤ã‘ã¦ãã ã•ã„  
 	```html
 	<table class="sortable">
 	```
-1. ƒwƒbƒ_‚ðƒNƒŠƒbƒN‚·‚é‚Æƒ\[ƒg‚³‚ê‚Ü‚·
+3. ãƒ˜ãƒƒãƒ€ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã¨ã‚½ãƒ¼ãƒˆã•ã‚Œã¾ã™
 
 
-*	“¯«‚Ì`sorTable.css`‹y‚Ñ`img`ƒfƒBƒŒƒNƒgƒŠ‚ð”z’u‚·‚é‚ÆA  
-	ƒ\[ƒgó‘Ô‚ð•\Ž¦‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+*	åŒæ¢±ã®`sorTable.css`åŠã³`img`ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é…ç½®ã™ã‚‹ã¨ã€  
+	ã‚½ãƒ¼ãƒˆçŠ¶æ…‹ã‚’è¡¨ç¤ºã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
 
 ## License
 
