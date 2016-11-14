@@ -1,46 +1,33 @@
 (function() {
     "use strict";
+    var ascClass = "order-asc";
+    var descClass = "order-desc";
 
-    //�����̃G�������g�S�Ăɓ���̃C�x���g�Ŕ��΂���֐����`����
+    /**
+     * setEventToAllObject
+     * 引数のエレメント全てに特定のイベントで発火する関数を定義する
+     *
+     * @param {HTMLElement} elements - 対象のエレメントの配列
+     * @param {String} event - 対象のイベント
+     * @param {Function} func - 発火する関数
+     * @return なし
+     */
     function setEventToAllObject(elements, event, func) {
         Object.keys(elements).forEach(function(key) {
             elements[key].addEventListener(event, func, false);
         });
     }
-    /**
-     * getTableData
-     * �\�[�g�����C�x���g
-     *
-     * @param {HTMLElement} tableElem - �e�[�u��
-     * @return {Array} data - tableElem�̃f�[�^�z��
-     */
-    function getTableData(tableElem) {
-        var data = [];
-        //1�s�ڂ��΂�
-        for (var i = 1, l = tableElem.length; i < l; i++) {
-            for (var j = 0, m = tableElem[i].cells.length; j < m; j++) {
-                if (typeof data[i] === "undefined") {
-                    data[i] = {};
-                    data[i]["key"] = i; //�\�[�g�p�̃L�[�ݒ�
-                }
-                data[i][j] = tableElem[i].cells[j].innerText;
-            }
-        }
-        return data;
-    }
-    /**
-     * sortEvent
-     * �\�[�g�����C�x���g
-     *
-     * @param {HTMLElement} elem - �N���b�N���ꂽ�G�������g
-     * @return {boolean} true
-     */
-    function sortEvent(elem) {
-        var ascClass = "order-asc";
-        var descClass = "order-desc";
 
-        //����Ώۂ̃e�[�u������肷��
-        //TABLE�^�O��������܂�elem�̐e�v�f�����ǂ�
+    /**
+     * getTargetTable
+     * 対象のテーブルのエレメントを取得
+     *
+     * @param {HTMLElement} elem - クリックしたth要素のエレメント
+     * @return {HTMLElement} table - クリックした要素の属するテーブル
+     */
+    function getTargetTable(elem) {
+        //操作対象のテーブルを特定する
+        //TABLEタグが見つかるまでelemの親要素をたどる
         var closest = function(th) {
             var parent = th.parentNode;
             if (parent.tagName.toUpperCase() === "TABLE") {
@@ -48,41 +35,97 @@
             }
             return closest(parent);
         };
-        var table = closest(elem);
-        if (!table) {
-            return;
-        }
+        return closest(elem);
+    }
 
-        //��ԍ��擾
-        var colNo = elem.cellIndex;
-        //�e�[�u���f�[�^�擾
-        var tableData = getTableData(table.querySelectorAll("tr"));
-
-        //�\�[�g����
-        //sortOrder=1�Ȃ珸���EsortOrder=-1�Ȃ�~��
-        var sortOrder = !elem.classList.contains(ascClass) ? 1 : -1;
-        tableData.sort(function(a, b) {
-            if (a[colNo] < b[colNo]) {
-                return -1 * sortOrder;
-            } else if (a[colNo] > b[colNo]) {
-                return sortOrder;
+    /**
+     * getTableData
+     * テーブルのデータ取得
+     *
+     * @param {HTMLElement} tableElem - テーブル
+     * @return {Array} data - tableElemのデータ配列
+     */
+    function getTableData(tableElem) {
+        var data = [];
+        //1行目を飛ばす
+        for (var i = 1, l = tableElem.length; i < l; i++) {
+            for (var j = 0, m = tableElem[i].cells.length; j < m; j++) {
+                if (typeof data[i] === "undefined") {
+                    data[i] = {};
+                    data[i]["key"] = i; //ソート用のキー設定
+                }
+                data[i][j] = tableElem[i].cells[j].innerText;
             }
-            return 0;
-        });
+        }
+        return data;
+    }
 
-        //�\�[�g���HTML���\�z���ď�������
+    /**
+     * sortTableData
+     * テーブルのデータをソート
+     *
+     * @param {Array} tableData - tableElemのデータ配列
+     * @param {Int} colNo - ソートする列番号
+     * @param {Int} sortOrder - ソート順
+     * @return {Array} tableData - ソート後配列
+     */
+    function sortTableData(tableData, colNo, sortOrder) {
+        //クリックした列番号取得
+        //ソート処理
+        tableData.sort(function(a, b) {
+                    if (a[colNo] < b[colNo]) {
+                        return -1 * sortOrder;
+                    } else if (a[colNo] > b[colNo]) {
+                        return sortOrder;
+                    }
+                    return 0;
+                });
+        return tableData;
+    }
+
+    /**
+     * rewriteTableHTML
+     * テーブルのHTMLを書き換え
+     *
+     * @param {HTMLElement} table - クリックした要素の属するテーブル
+     * @param {Array} tableData - tableElemのデータ配列
+     * @return なし
+     */
+    function rewriteTableHTML(table, tableData) {
+        //ソート後のHTMLを構築して書き換え
         var html = "";
         tableData.forEach(function(x) {
             html += table.querySelectorAll("tr")[x["key"]].outerHTML;
         });
         table.querySelector("tbody").innerHTML = html;
+    }
 
-        //�e�[�u���̏����~��Class���N���A�E�ݒ肷��
+    /**
+     * removeTHClass
+     * TH要素のクラスを削除する
+     *
+     * @param {HTMLElement} table - クリックした要素の属するテーブル
+     * @param {Int} sortOrder - ソート順
+     * @return なし
+     */
+    function removeTHClass(table, tableData) {
+        //テーブルの昇順降順Classをクリア・設定する
         var tableElem = table.querySelectorAll("thead th");
         Object.keys(tableElem).forEach(function(key) {
             tableElem[key].classList.remove(descClass);
             tableElem[key].classList.remove(ascClass);
         });
+    }
+
+    /**
+     * setTHClass
+     * TH要素のクラスをリセットして、ソート対象のみ書き換え
+     *
+     * @param {HTMLElement} elem - クリックされたエレメント
+     * @param {Int} sortOrder - ソート順
+     * @return なし
+     */
+    function setTHClass(elem, sortOrder) {
         if (sortOrder === 1) {
             elem.classList.add(ascClass);
         }else {
@@ -90,7 +133,40 @@
         }
     }
 
-    //���[�h���Ƀ\�[�g�p�C�x���g���o�C���h����
+    /**
+     * sortEvent
+     * ソート処理イベント
+     *
+     * @param {HTMLElement} elem - クリックされたエレメント
+     * @return {boolean} true
+     */
+    function sortEvent(elem) {
+
+        //操作対象のテーブルを特定する
+        var table = getTargetTable(elem);
+        if (!table) {
+            return;
+        }
+
+        //テーブルデータ取得
+        var tableData = getTableData(table.querySelectorAll("tr"));
+
+        //ソート順取得
+        //"order-asc"クラスを持っていなければ昇順・それ以外なら降順
+        var sortOrder = !elem.classList.contains(ascClass) ? 1 : -1;
+
+        //データソート処理
+        tableData = sortTableData(tableData, elem.cellIndex, sortOrder);
+
+        //ソート後のHTMLを構築して書き換え
+        rewriteTableHTML(table, tableData);
+
+        //テーブルの昇順降順Classをクリア・設定する
+        removeTHClass(table, tableData);
+        setTHClass(elem, sortOrder);
+    }
+
+    //ロード時にソート用イベントをバインドする
     window.addEventListener("load", function() {
         var elem = document.querySelectorAll("table.sortable thead th");
         setEventToAllObject(elem, "click", function(e) {sortEvent(e.target); });
