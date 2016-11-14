@@ -1,7 +1,49 @@
-(function() {
+var sorTablejs = function (setting) {
     "use strict";
-    var ascClass = "order-asc";
-    var descClass = "order-desc";
+    
+    //default
+    var config = {
+        //引数がある場合引数のクエリ、なければsortableクラスをソート対象に
+        targetTable: "table.sortable",
+        cssAsc: "order-asc",
+        cssDesc: "order-desc",
+        cssBg: "sortable",
+        selectorHeaders: "thead th"
+    };
+    
+    //クエリ文字列のときは対象をクエリ文字列に
+    if(setting instanceof String || typeof setting === "string"){
+        config.targetTable = setting;
+    }else if(typeof setting === "object"){
+    //オブジェクトの場合は設定値を上書き
+        Object.keys(setting).forEach(function(key) {
+            config[key] = setting[key];
+        });
+    }
+    
+    /** Unimplemented
+        cssHeader: "header",
+        cssChildRow: "expand-child",
+        sortInitialOrder: "asc",
+        sortMultiSortKey: "shiftKey",
+        sortForce: null,
+        sortAppend: null,
+        sortLocaleCompare: true,
+        textExtraction: "simple",
+        parsers: {}, 
+        widgets: [],
+        widgetZebra: {
+            css: ["even", "odd"]
+        }, 
+        headers: {}, 
+        widthFixed: false,
+        cancelSelection: true,
+        sortList: [],
+        headerList: [],
+        dateFormat: "us",
+        decimal: '/\.|\,/g',
+        onRenderHeader: null,
+    **/
 
     /**
      * setEventToAllObject
@@ -19,13 +61,13 @@
     }
 
     /**
-     * getTargetTable
+     * getTableElement
      * 対象のテーブルのエレメントを取得
      *
      * @param {HTMLElement} elem - クリックしたth要素のエレメント
      * @return {HTMLElement} table - クリックした要素の属するテーブル
      */
-    function getTargetTable(elem) {
+    function getTableElement(elem) {
         //操作対象のテーブルを特定する
         //TABLEタグが見つかるまでelemの親要素をたどる
         var closest = function(th) {
@@ -110,10 +152,10 @@
      */
     function removeTHClass(table, tableData) {
         //テーブルの昇順降順Classをクリア・設定する
-        var tableElem = table.querySelectorAll("thead th");
+        var tableElem = table.querySelectorAll(config.selectorHeaders);
         Object.keys(tableElem).forEach(function(key) {
-            tableElem[key].classList.remove(descClass);
-            tableElem[key].classList.remove(ascClass);
+            tableElem[key].classList.remove(config.cssDesc);
+            tableElem[key].classList.remove(config.cssAsc);
         });
     }
 
@@ -127,9 +169,9 @@
      */
     function setTHClass(elem, sortOrder) {
         if (sortOrder === 1) {
-            elem.classList.add(ascClass);
+            elem.classList.add(config.cssAsc);
         }else {
-            elem.classList.add(descClass);
+            elem.classList.add(config.cssDesc);
         }
     }
 
@@ -143,7 +185,7 @@
     function sortEvent(elem) {
 
         //操作対象のテーブルを特定する
-        var table = getTargetTable(elem);
+        var table = getTableElement(elem);
         if (!table) {
             return;
         }
@@ -152,8 +194,8 @@
         var tableData = getTableData(table.querySelectorAll("tr"));
 
         //ソート順取得
-        //"order-asc"クラスを持っていなければ昇順・それ以外なら降順
-        var sortOrder = !elem.classList.contains(ascClass) ? 1 : -1;
+        //昇順クラスを持っていなければ昇順・それ以外なら降順
+        var sortOrder = !elem.classList.contains(config.cssAsc) ? 1 : -1;
 
         //データソート処理
         tableData = sortTableData(tableData, elem.cellIndex, sortOrder);
@@ -168,8 +210,15 @@
 
     //ロード時にソート用イベントをバインドする
     window.addEventListener("load", function() {
-        var elem = document.querySelectorAll("table.sortable thead th");
+        var elem = document.querySelector(config.targetTable).querySelectorAll(config.selectorHeaders);
+        //カーソル表示用CSS追加
+        document.querySelector(config.targetTable).classList.add(config.cssBg);
         setEventToAllObject(elem, "click", function(e) {sortEvent(e.target); });
     }, false);
+    
+    return this;
+};
 
-})();
+sorTablejs();
+//sorTablejs("table#sortable");
+//sorTablejs({targetTable: "table#sortable"});
