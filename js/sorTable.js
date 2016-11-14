@@ -1,6 +1,6 @@
-var sorTablejs = function (setting) {
+var sorTablejs = function(setting) {
     "use strict";
-    
+
     //default
     var config = {
         //引数がある場合引数のクエリ、なければsortableクラスをソート対象に
@@ -10,17 +10,17 @@ var sorTablejs = function (setting) {
         cssBg: "sortable",
         selectorHeaders: "thead th"
     };
-    
+
     //クエリ文字列のときは対象をクエリ文字列に
-    if(setting instanceof String || typeof setting === "string"){
+    if (setting instanceof String || typeof setting === "string") {
         config.targetTable = setting;
-    }else if(typeof setting === "object"){
+    }else if (typeof setting === "object") {
     //オブジェクトの場合は設定値を上書き
         Object.keys(setting).forEach(function(key) {
             config[key] = setting[key];
         });
     }
-    
+
     /** Unimplemented
         cssHeader: "header",
         cssChildRow: "expand-child",
@@ -30,12 +30,12 @@ var sorTablejs = function (setting) {
         sortAppend: null,
         sortLocaleCompare: true,
         textExtraction: "simple",
-        parsers: {}, 
+        parsers: {},
         widgets: [],
         widgetZebra: {
             css: ["even", "odd"]
-        }, 
-        headers: {}, 
+        },
+        headers: {},
         widthFixed: false,
         cancelSelection: true,
         sortList: [],
@@ -215,10 +215,8 @@ var sorTablejs = function (setting) {
         document.querySelector(config.targetTable).classList.add(config.cssBg);
         setEventToAllObject(elem, "click", function(e) {sortEvent(e.target); });
     }, false);
-    
+
     return this;
 };
-
+//Provisional
 sorTablejs();
-//sorTablejs("table#sortable");
-//sorTablejs({targetTable: "table#sortable"});
