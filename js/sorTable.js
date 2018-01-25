@@ -49,14 +49,14 @@ var sorTablejs = function(setting) {
      * setEventToAllObject
      * 引数のエレメント全てに特定のイベントで発火する関数を定義する
      *
-     * @param {HTMLElement} elements - 対象のエレメントの配列
-     * @param {String} event - 対象のイベント
-     * @param {Function} func - 発火する関数
+     * @param {HTMLElement} elem - 対象のエレメントの配列
+     * @param {String} e - 対象のイベント
+     * @param {Function} f - 発火する関数
      * @return なし
      */
-    function setEventToAllObject(elements, event, func) {
-        Object.keys(elements).forEach(function(key) {
-            elements[key].addEventListener(event, func, false);
+    function setEventToAllObject(elem, e, f) {
+        [...elem].map((v)=> {
+            v.addEventListener(e, f, false);
         });
     }
 
