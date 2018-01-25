@@ -70,14 +70,10 @@ var sorTablejs = function(setting) {
     function getTableElement(elem) {
         //操作対象のテーブルを特定する
         //TABLEタグが見つかるまでelemの親要素をたどる
-        var closest = function(th) {
-            var parent = th.parentNode;
-            if (parent.tagName.toUpperCase() === "TABLE") {
-                return parent;
-            }
-            return closest(parent);
+        var f = th => {
+            return th.tagName.toUpperCase() === "TABLE"? th : f(th.parentNode);
         };
-        return closest(elem);
+        return f(elem.parentNode);
     }
 
     /**
