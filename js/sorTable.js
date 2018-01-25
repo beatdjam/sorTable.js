@@ -110,15 +110,15 @@ var sorTablejs = function(setting) {
     function sortTableData(tableData, colNo, sortOrder) {
         //クリックした列番号取得
         //ソート処理
-        tableData.sort(function(a, b) {
-                    if (a[colNo] < b[colNo]) {
-                        return -1 * sortOrder;
-                    } else if (a[colNo] > b[colNo]) {
-                        return sortOrder;
-                    }
-                    return 0;
-                });
-        return tableData;
+        return tableData.sort((a, b) => {
+            if (a[colNo] < b[colNo]) {
+                return -1 * sortOrder;
+            }            
+            if (a[colNo] > b[colNo]) {
+                return sortOrder;
+            }
+            return 0;
+        });
     }
 
     /**
