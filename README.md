@@ -1,6 +1,9 @@
 # sorTable.js
 
-Sort HTML table without jQuery
+Sort HTML table without jQuery.
+
+English description   
+→ https://www.cssscript.com/minimal-table-sorting-library-sortable-js/
 
 ## 説明
 
